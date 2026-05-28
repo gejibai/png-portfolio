@@ -6,7 +6,7 @@
     <meta name="description" content="个人作品集展示网站，按作品顺序完整呈现图片内容。">
     <title>个人作品集</title>
     <link rel="preload" href="assets/images/001.png" as="image">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=2">
   </head>
   <body>
     <header class="site-header">
@@ -20,20 +20,20 @@
         </div>
         <article class="work-page" aria-live="polite">
           <div class="work-meta">
-            <p id="work-title"></p>
-            <p id="work-count"></p>
+            <p id="work-title">作品 001</p>
+            <p id="work-count">1 / 32</p>
           </div>
           <figure class="work-frame">
-            <img id="work-image" src="" alt="">
+            <img id="work-image" src="assets/images/001.png" alt="作品 001" width="1920" height="2713">
           </figure>
           <nav class="pager" aria-label="作品翻页">
-            <a class="pager-link" id="prev-link" href="">上一页</a>
-            <a class="pager-link" id="next-link" href="">下一页</a>
+            <a class="pager-link is-disabled" id="prev-link">上一页</a>
+            <a class="pager-link" id="next-link" href="?work=002">下一页</a>
           </nav>
         </article>
       </section>
     </main>
 
-    <script src="script.js"></script>
+    <script src="script.js?v=2"></script>
   </body>
 </html>

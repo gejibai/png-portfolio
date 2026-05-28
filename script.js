@@ -44,7 +44,9 @@ function labelFor(index) {
 }
 
 function hrefFor(index) {
-  return `?work=${works[index].file.replace(".png", "")}`;
+  const params = new URLSearchParams(window.location.search);
+  params.set("work", works[index].file.replace(".png", ""));
+  return `?${params.toString()}`;
 }
 
 function getCurrentIndex() {
