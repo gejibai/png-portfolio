@@ -5,8 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="个人作品集展示网站，按作品顺序完整呈现图片内容。">
     <title>个人作品集</title>
-    <link rel="preload" href="assets/images/001.png" as="image">
-    <link rel="stylesheet" href="styles.css?v=3">
+    <link
+      rel="preload"
+      href="assets/optimized/001-1440.webp"
+      as="image"
+      type="image/webp"
+      imagesrcset="assets/optimized/001-960.webp 960w, assets/optimized/001-1440.webp 1440w, assets/optimized/001-1920.webp 1920w"
+      imagesizes="(max-width: 620px) 100vw, min(1120px, 90vw)"
+    >
+    <link rel="stylesheet" href="styles.css?v=4">
   </head>
   <body>
     <header class="site-header">
@@ -30,6 +37,6 @@
       <p id="viewer-caption"></p>
     </dialog>
 
-    <script src="script.js?v=3"></script>
+    <script src="script.js?v=4"></script>
   </body>
 </html>

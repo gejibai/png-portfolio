@@ -105,6 +105,8 @@ h2 {
   background: var(--panel);
   overflow: hidden;
   box-shadow: var(--shadow);
+  content-visibility: auto;
+  contain-intrinsic-size: 900px;
 }
 
 .work-button {
@@ -114,6 +116,11 @@ h2 {
   background: transparent;
   cursor: zoom-in;
   overflow: hidden;
+}
+
+.work-button picture,
+.work-button img {
+  display: block;
 }
 
 .work-button img {

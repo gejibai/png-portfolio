@@ -46,10 +46,23 @@ function labelFor(index) {
   return `作品 ${works[index].file.replace(".png", "")}`;
 }
 
+function optimizedSrcSet(item) {
+  const name = item.file.replace(".png", "");
+  return [
+    `assets/optimized/${name}-960.webp 960w`,
+    `assets/optimized/${name}-1440.webp 1440w`,
+    `assets/optimized/${name}-1920.webp 1920w`
+  ].join(", ");
+}
+
+function optimizedFullSrc(item) {
+  return `assets/optimized/${item.file.replace(".png", "")}-1920.webp`;
+}
+
 function openViewer(index) {
   activeIndex = index;
   const item = works[activeIndex];
-  viewerImage.src = `assets/images/${item.file}`;
+  viewerImage.src = optimizedFullSrc(item);
   viewerImage.alt = labelFor(activeIndex);
   viewerCaption.textContent = `${labelFor(activeIndex)} / ${activeIndex + 1} of ${works.length}`;
   viewer.showModal();
@@ -70,17 +83,28 @@ works.forEach((item, index) => {
   button.setAttribute("aria-label", `查看${labelFor(index)}`);
   button.addEventListener("click", () => openViewer(index));
 
+  const picture = document.createElement("picture");
+  const source = document.createElement("source");
+  source.type = "image/webp";
+  source.srcset = optimizedSrcSet(item);
+  source.sizes = "(max-width: 620px) 100vw, min(1120px, 90vw)";
+
   const image = document.createElement("img");
   image.src = `assets/images/${item.file}`;
   image.alt = labelFor(index);
   image.width = item.width;
   image.height = item.height;
   image.loading = index < 2 ? "eager" : "lazy";
+  image.decoding = "async";
+  if (index === 0) {
+    image.fetchPriority = "high";
+  }
 
   const caption = document.createElement("figcaption");
   caption.innerHTML = `<span>${labelFor(index)}</span><span>${index + 1}/${works.length}</span>`;
 
-  button.append(image);
+  picture.append(source, image);
+  button.append(picture);
   card.append(button, caption);
   gallery.append(card);
 });
