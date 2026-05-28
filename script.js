@@ -33,70 +33,59 @@ const works = [
   { file: "033.png", width: 1920, height: 1080 }
 ];
 
-const gallery = document.querySelector("#gallery");
-const viewer = document.querySelector("#viewer");
-const viewerImage = document.querySelector("#viewer-image");
-const viewerCaption = document.querySelector("#viewer-caption");
-const closeButton = document.querySelector(".viewer-close");
-const prevButton = document.querySelector(".viewer-prev");
-const nextButton = document.querySelector(".viewer-next");
-let activeIndex = 0;
+const image = document.querySelector("#work-image");
+const title = document.querySelector("#work-title");
+const count = document.querySelector("#work-count");
+const prevLink = document.querySelector("#prev-link");
+const nextLink = document.querySelector("#next-link");
 
 function labelFor(index) {
   return `作品 ${works[index].file.replace(".png", "")}`;
 }
 
-function openViewer(index) {
-  activeIndex = index;
-  const item = works[activeIndex];
-  viewerImage.src = `assets/images/${item.file}`;
-  viewerImage.alt = labelFor(activeIndex);
-  viewerCaption.textContent = `${labelFor(activeIndex)} / ${activeIndex + 1} of ${works.length}`;
-  viewer.showModal();
+function hrefFor(index) {
+  return `?work=${works[index].file.replace(".png", "")}`;
 }
 
-function shiftViewer(direction) {
-  const nextIndex = (activeIndex + direction + works.length) % works.length;
-  openViewer(nextIndex);
+function getCurrentIndex() {
+  const params = new URLSearchParams(window.location.search);
+  const requested = params.get("work");
+  const index = works.findIndex((item) => item.file.replace(".png", "") === requested);
+  return index >= 0 ? index : 0;
 }
 
-works.forEach((item, index) => {
-  const card = document.createElement("figure");
-  card.className = "work-card";
+function setPager(link, index) {
+  if (index < 0 || index >= works.length) {
+    link.classList.add("is-disabled");
+    link.removeAttribute("href");
+    return;
+  }
 
-  const button = document.createElement("button");
-  button.className = "work-button";
-  button.type = "button";
-  button.setAttribute("aria-label", `查看${labelFor(index)}`);
-  button.addEventListener("click", () => openViewer(index));
+  link.classList.remove("is-disabled");
+  link.href = hrefFor(index);
+}
 
-  const image = document.createElement("img");
+function render() {
+  const index = getCurrentIndex();
+  const item = works[index];
   image.src = `assets/images/${item.file}`;
   image.alt = labelFor(index);
   image.width = item.width;
   image.height = item.height;
-  image.loading = index < 2 ? "eager" : "lazy";
+  title.textContent = labelFor(index);
+  count.textContent = `${index + 1} / ${works.length}`;
+  setPager(prevLink, index - 1);
+  setPager(nextLink, index + 1);
+}
 
-  const caption = document.createElement("figcaption");
-  caption.innerHTML = `<span>${labelFor(index)}</span><span>${index + 1}/${works.length}</span>`;
-
-  button.append(image);
-  card.append(button, caption);
-  gallery.append(card);
-});
-
-closeButton.addEventListener("click", () => viewer.close());
-prevButton.addEventListener("click", () => shiftViewer(-1));
-nextButton.addEventListener("click", () => shiftViewer(1));
-
-viewer.addEventListener("click", (event) => {
-  if (event.target === viewer) {
-    viewer.close();
+window.addEventListener("keydown", (event) => {
+  const index = getCurrentIndex();
+  if (event.key === "ArrowLeft" && index > 0) {
+    window.location.href = hrefFor(index - 1);
+  }
+  if (event.key === "ArrowRight" && index < works.length - 1) {
+    window.location.href = hrefFor(index + 1);
   }
 });
 
-window.addEventListener("keydown", (event) => {
-  if (!viewer.open) return;
-  if (event.key === "ArrowLeft") shiftViewer(-1);
-  if (event.key === "ArrowRight") shiftViewer(1);
-});
+render();
